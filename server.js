@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
 app.use(bodyParser.json());
 
 // DEFAULT ROUTE
-app.get('/', (req, res) => { res.send('Welcome To POC WEBHOOK :)') })
+app.get('/', (req, res) => { res.send('Welcome To Desk Friendemic Webhook :)') })
 //
 app.post('/', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });
