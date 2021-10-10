@@ -18,7 +18,7 @@ class Sendbird {
         this.access = access;
     }
 
-    processWebhook(payload) {
+    processWebhook(payload,res) {
         if (payload.eventType !== "TICKET.STATUS.UPDATED") return "eventType: "+payload.eventType;
         let ticketId = payload.data.id;
         let teamKey = payload.data.group.key;
