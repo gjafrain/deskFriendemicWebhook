@@ -8,8 +8,8 @@ const defaultStatus = "PENDING";
 
 const teamConfig = {
     "friendemic": null,
-    "dealer-a": 15,
-    "dealer-b": 15
+    "dealer-a": 30,
+    "dealer-b": 50
 }
 
 class Sendbird {
