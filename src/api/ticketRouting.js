@@ -21,7 +21,7 @@ class TicketRouting {
 
     processWebhook(payload, res) {
 
-        console.log('TICKET ROUTE PAYLOAD ---', payload)
+        // console.log('TICKET ROUTE PAYLOAD ---', payload)
 
         if (payload.eventType !== "TICKET.STATUS.UPDATED") return sendSuccessMessage("eventType: " + payload.eventType, res);
         let ticketId = payload.data.id;
@@ -44,7 +44,7 @@ class TicketRouting {
             console.log("[TICKET-" + ticketId + "] STARTING A " + waitTime + " SEC TIMER");
             setTimeout(() => {
                 this.ticketStillUnassigned(ticketId).then(stillPending => {
-                    console.log('stillPending...', stillPending)
+                    console.log('STILL PENDING ---', stillPending)
                     if (stillPending) this.transferTicket(ticketId);
                 });
             }, waitTime * 1000)
@@ -98,7 +98,6 @@ class TicketRouting {
             json: true
         };
         return axios(authOptions).then(res => {
-            console.log(res);
             return res.data.members.filter(member => member.connection === "ONLINE").length
         }).catch(error => {
             //console.error(error)
