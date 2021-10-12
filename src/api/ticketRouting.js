@@ -20,7 +20,10 @@ class TicketRouting {
     }
 
     processWebhook(payload, res) {
-        // if (payload.eventType !== "TICKET.STATUS.UPDATED") return sendSuccessMessage("eventType: " + payload.eventType, res);
+
+        console.log('TICKET ROUTE PAYLOAD ---', payload)
+
+        if (payload.eventType !== "TICKET.STATUS.UPDATED") return sendSuccessMessage("eventType: " + payload.eventType, res);
         let ticketId = payload.data.id;
         let teamKey = payload.data.group.key;
         let groupId = payload.data.group.id;
