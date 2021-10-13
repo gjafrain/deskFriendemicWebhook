@@ -14,12 +14,12 @@ class SendbirdChat {
         };
     }
     processWebhook(payload, res) {
-        console.log("ChatPayload",payload);
         const appId = payload.app_id;
         const sender = payload.sender;
         const channel = payload.channel;
         const message = payload.payload;
         if (appId !== AppID) return false; //Must be Friendemic's App
+        if(!/^sendbird_desk_agent_id/.test(sender.user_id)) return false; //Must be sent by Desk Agent 
         //TODO only process agent messages
         return this.findService(channel).then(metadata => {
             console.log(metadata);
@@ -97,7 +97,7 @@ class SendbirdChat {
     }
     sendToTelegram(sender, message, chat_id) {
         console.log("SendbirdChat.sendToTelegram", message.message)
-        let messageText = `From: ${sender.nickname} | Message: ${message.message} | Chat Id: ${chat_id}`;
+        let messageText = `${message.message} —${sender.nickname}`;
         return Telegram.sendMessage(chat_id, messageText);
     }
     sendToGMB(sender, message, channel) {
