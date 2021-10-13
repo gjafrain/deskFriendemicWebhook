@@ -13,11 +13,7 @@ class SendbirdDesk {
         this.defaultWaitTime = 60;
         this.defaultTeamKey = "friendemic";
         this.defaultStatus = "PENDING";
-
     }
-
-
-
     getActiveTicket(sendbird_id) {
         console.log("SendbirdDesk.getActiveTicket", { sendbird_id })
         var authOptions = {
@@ -29,11 +25,8 @@ class SendbirdDesk {
         return axios(authOptions).then(res => {
             return this.identifyActiveTicket(res.data);
         }).catch(e => console.log("getActiveTicket FAILURE", e));
-
     }
-
     identifyActiveTicket(data) {
-
         if (!data.results[0]) return false;
         console.log("SendbirdDesk.identifyActiveTicket", data.results[0].id);
         for (let i in data.results) {
@@ -42,8 +35,6 @@ class SendbirdDesk {
         }
         return false;
     }
-
-
     processMessage(sendbird_id, message, nickname, src) {
         console.log("SendbirdDesk.processMessage", { sendbird_id, message, src })
         return this.getCustomer(sendbird_id, nickname).then(customerObj => this.getActiveTicket(customerObj.sendbirdId).then(ticket => {
@@ -51,8 +42,6 @@ class SendbirdDesk {
             return this.updateTicket(ticket, sendbird_id, message);
         }));
     }
-
-
     createTicket(sendbird_id, message, nickname, src) {
         console.log("SendbirdDesk.createTicket", { sendbird_id, message, src })
         return this.getCustomer(sendbird_id, nickname).then(customerObj => {
@@ -71,20 +60,15 @@ class SendbirdDesk {
             return axios(authOptions).then(ticket => {
                 let channel = ticket.data.channelUrl;
                 SendbirdChat.setChannelMetadata(channel, src);
-
                 return SendbirdChat.sendMessage(channel, sendbird_id, message)
             }).catch(e => console.log("createTicket FAILURE", (e.response ? e.response.data : e)));
         });
     }
-
-
     updateTicket(ticket, sendbird_id, message) {
         console.log("SendbirdDesk.updateTicket", ticket.id, { sendbird_id, message });
         let channel = ticket.channelUrl;
         return SendbirdChat.sendMessage(channel, sendbird_id, message);
     }
-
-
     getCustomer(sendbird_id, nickname) {
         console.log("SendbirdDesk.getCustomer", { sendbird_id })
         var authOptions = {
@@ -100,8 +84,6 @@ class SendbirdDesk {
             return this.createCustomer(sendbird_id, nickname);
         });
     }
-
-
     createCustomer(sendbird_id, nickname) {
         console.log("SendbirdDesk.createCustomer", { sendbird_id })
         return SendbirdChat.getUser(sendbird_id, nickname).then(sendbird_id => {
@@ -122,14 +104,9 @@ class SendbirdDesk {
                 });
         })
     }
-
-
-
     // TICKET ROUTING FUNCTIONS
     processWebhook(payload, res) {
-
         // console.log('TICKET ROUTE PAYLOAD ---', payload)
-
         if (payload.eventType !== "TICKET.STATUS.UPDATED") return sendSuccessMessage("eventType: " + payload.eventType, res);
         let ticketId = payload.data.id;
         let groupId = payload.data.group.id;
@@ -138,9 +115,6 @@ class SendbirdDesk {
         if (teamKey === this.defaultTeamKey) return sendSuccessMessage("teamKey: " + teamKey, res);
         return this.startTimer(ticketId, groupId, waitTime, res);
     }
-
-
-
     loadWaitTime(group) {
         //console.log("SendbirdDesk.loadWaitTime")
         try {
@@ -150,10 +124,8 @@ class SendbirdDesk {
             return this.defaultWaitTime;
         }
     }
-
     async startTimer(ticketId, groupId, waitTime, res) {
         //  console.log("SendbirdDesk.startTimer", { ticketId, groupId, waitTime })
-
         const isOnline = await this.teamAgentsOnlineStatus(groupId)
         // check if team agent is online then Ticket will assign to admin on specific time else immediately  
         if (isOnline) {
@@ -169,7 +141,6 @@ class SendbirdDesk {
             return sendSuccessMessage("[TICKET-" + ticketId + "] TRANSFERRED", res);
         }
     }
-
     ticketStillUnassigned(ticketId,topres) {
         console.log("[TICKET-" + ticketId + "] CHECKING TICKET STATUS...");
         var authOptions = {
@@ -201,7 +172,6 @@ class SendbirdDesk {
             return null
         })
     }
-
     teamAgentsOnlineStatus(group_id) {
         var authOptions = {
             method: 'GET',
@@ -217,7 +187,6 @@ class SendbirdDesk {
             return false
         })
     }
-
     transferTicket(ticketId) {
         console.log("[TICKET-" + ticketId + "] TRANSFERING to " + this.defaultTeamKey)
         var authOptions = {
@@ -244,10 +213,7 @@ class SendbirdDesk {
             return false
         })
     }
-
-
     //TICKET CLEANUP
-
     closeOpenTickets(res) {
         console.log("SendbirdDesk.closeOpenTickets")
         this.listTicketsofStatus("PENDING")
@@ -257,7 +223,6 @@ class SendbirdDesk {
                 sendSuccessMessage("Closing Tickets " + tickets.map(ticket => ticket.id).join(", "), res)
             });
     }
-
     listTicketsofStatus(status, appendTo) {
         console.log("SendbirdDesk.listTicketsofStatus",{status})
         if (!Array.isArray(appendTo)) appendTo = [];
@@ -272,10 +237,7 @@ class SendbirdDesk {
         }).catch(error => {
             return appendTo;
         })
-
     }
-
-
     closeTicket = (ticketId, res) => {
         console.log("SendbirdDesk.closeTicket",{ticketId})
         var authOptions = {
@@ -296,7 +258,6 @@ class SendbirdDesk {
             if (res) sendSuccessMessage(error.response.data.detail, res)
         })
     }
-
 }
 var desk = new SendbirdDesk(AppID, SendbirdDeskApiToken);
 module.exports = desk

@@ -14,11 +14,13 @@ class SendbirdChat {
         };
     }
     processWebhook(payload, res) {
+        console.log("ChatPayload",payload);
         const appId = payload.app_id;
         const sender = payload.sender;
         const channel = payload.channel;
         const message = payload.payload;
         if (appId !== AppID) return false; //Must be Friendemic's App
+        //TODO only process agent messages
         return this.findService(channel).then(metadata => {
             console.log(metadata);
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
@@ -54,7 +56,6 @@ class SendbirdChat {
         }).catch(e => console.log("sendMessage FAILURE", e.response.data));;
     }
     getUser(sendbird_id, nickname) {
-
         console.log("SendbirdChat.getUser", { sendbird_id })
         var authOptions = {
             method: 'GET',

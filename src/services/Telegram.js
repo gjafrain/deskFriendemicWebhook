@@ -1,17 +1,13 @@
 
-
 const axios = require('axios');
 const telegramBotToken = "2037460170:AAE0rfJLXFxWylxHBGRlJgtMwe_d27nldIE";
 const SendbirdDesk = require('./SendbirdDesk');
-
 class Telegram {
     constructor(app_id, token) {
         this.app_id = app_id;
         this.token = token;
     }
-
     processWebhook(payload, res, SendbirdDesk) {
-
         const user_id = payload.message.from.id;
         const chat_id = payload.message.chat.id;
         const sendbird_id = `telegram_${chat_id}_${user_id}`;
@@ -19,10 +15,7 @@ class Telegram {
         const nickname = payload.message.from.first_name+" "+payload.message.from.last_name;
         return SendbirdDesk.processMessage(sendbird_id,message,nickname,{"telegram":chat_id.toString()}).then(result=>res.send(result))
     }
-
-
     sendMessage(chat_id, message) {
-
         console.log("TELEGRAM sendMessage",{chat_id,message});
         var authOptions = {
             method: 'POST',
@@ -40,14 +33,7 @@ class Telegram {
             console.log("TELEGRAM MESSAGE ERROR",error);
             return false
         })
-
     }
-
-
-
 }
-
-
 var telegram = new Telegram();
-
 module.exports = telegram
