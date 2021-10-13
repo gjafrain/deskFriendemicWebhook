@@ -162,7 +162,7 @@ class SendbirdDesk {
             if (res.data.status2 === "PENDING") {
                 console.log("[TICKET-" + ticketId + "] NEEDS TO BE ASSIGNED TO: " + this.defaultTeamKey);
                 sendSuccessMessage("[TICKET-" + ticketId + "] NEEDS TO BE ASSIGNED TO: " + this.defaultTeamKey, topres);
-                return false;
+                return true;
             }
             else console.log("[TICKET-" + ticketId + "] NEEDS NO REASSIGNMENT");
             sendSuccessMessage("[TICKET-" + ticketId + "] NEEDS NO REASSIGNMENT", topres);
