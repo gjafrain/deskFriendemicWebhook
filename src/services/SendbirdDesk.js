@@ -108,7 +108,8 @@ class SendbirdDesk {
     processWebhook(payload, res) {
         // console.log('TICKET ROUTE PAYLOAD ---', payload)
         if (payload.eventType !== "TICKET.STATUS.UPDATED") return sendSuccessMessage("eventType: " + payload.eventType, res);
-        console.log("SendbirdDesk.processWebhook",payload)
+        if (payload.data.status !== "UNASSIGNED") return sendSuccessMessage("payload.data.status: " + payload.data.status, res);
+        if (payload.data.status2 !== "PENDING") return sendSuccessMessage("payload.data.status2: " + payload.data.status2, res);
         let ticketId = payload.data.id;
         let groupId = payload.data.group.id;
         let teamKey = payload.data.group.key;
