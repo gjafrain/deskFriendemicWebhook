@@ -11,7 +11,7 @@ app.disable('x-powered-by')
 app.use(bodyParser.json());
 
 // DEFAULT ROUTE
-app.get('/', (req, res) => { res.send('Welcome To Desk Friendemic Webhook :)') })
+app.get('/', (req, res) => { res.send('Webhook Server') })
 //
 app.use('/',  router);
 
