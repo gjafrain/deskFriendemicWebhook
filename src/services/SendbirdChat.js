@@ -107,7 +107,7 @@ class SendbirdChat {
     }
     sendToTwilio(clientPhoneNumber, message,customerPhoneNumber ) {
         console.log("SendbirdChat.sendToTwilio", {clientPhoneNumber, message, customerPhoneNumber})
-        return Twilio.sendMessage(clientPhoneNumber, message, customerPhoneNumber);
+        return Twilio.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
     }
 }
 var chat = new SendbirdChat(AppID, SendbirdChatToken);
