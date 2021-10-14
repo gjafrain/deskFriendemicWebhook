@@ -9,6 +9,8 @@ class Twilio {
     }
     processWebhook(payload, res, SendbirdDesk) { //CUSTOMER TO CLIENT
         console.log("Twilio Payload",payload);
+        if(!payload) return res.send("No Payload");
+        if(!payload.from) return res.send("No Sender");
         // SEE https://www.twilio.com/docs/usage/webhooks/sms-webhooks
         const from_phone_num = payload.from.replace(/\D+/g,'');
         const to_phone_num = payload.to.replace(/\D+/g,'');
