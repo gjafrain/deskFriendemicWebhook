@@ -2,11 +2,12 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const bodyParser = require('body-parser');
+const { urlencoded, json } = require('body-parser');
 // 
 const router = require("./src/routes.js");
 app.disable('x-powered-by')
-app.use(bodyParser.json());
+app.use(urlencoded({ extended: false }));
+app.use(json);
 // DEFAULT ROUTE
 app.get('/', (req, res) => { res.send('Webhook Server') })
 //
