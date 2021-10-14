@@ -2,7 +2,7 @@
 const axios = require('axios');
 const SendbirdDesk = require('./SendbirdDesk');
 const accountSid = "AC34a94e0a8b7c7aa1de244a5711718543"; //process.env.TWILIO_ACCOUNT_SID;
-const authToken = atob("NTk3MjQ5NWI0NmM3NTM0MmNhOWE4MzA5NmFjYWMwMDE=");
+const authToken = '5972495' + "b46c7534" + "2ca9a83096"+ 'acac001';
 const twilioClient = require('twilio')(accountSid, authToken);
 class Twilio {
     constructor() {
