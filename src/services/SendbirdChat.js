@@ -106,7 +106,7 @@ class SendbirdChat {
         return GoogleMyBusiness.sendMessage(sender, message, channel);
     }
     sendToTwilio(clientPhoneNumber, message,customerPhoneNumber ) {
-        console.log("SendbirdChat.sendToTwilio", {sender, message, customerPhoneNumber})
+        console.log("SendbirdChat.sendToTwilio", {clientPhoneNumber, message, customerPhoneNumber})
         return Twilio.sendMessage(clientPhoneNumber, message, customerPhoneNumber);
     }
 }

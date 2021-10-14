@@ -23,8 +23,8 @@ class Twilio {
         twilioClient.messages
             .create({
                 body: message,
-                from: from_phone_num,
-                to: to_phone_num
+                from: "+"+from_phone_num,
+                to: "+"+to_phone_num
             })
             .then(message => "SMS Message SENT. " + message)
             .catch(e=>console.log("SMS FAILED ",e));
