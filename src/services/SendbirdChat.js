@@ -25,7 +25,7 @@ class SendbirdChat {
         return this.findService(channel).then(metadata => {
             console.log(metadata);
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
-            if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customerPhoneNumber));
+            if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customer_phone_num));
             return res.send("Could not process requrest.");
         });
     }
