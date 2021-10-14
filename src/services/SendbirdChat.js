@@ -25,6 +25,7 @@ class SendbirdChat {
         return this.findService(channel).then(metadata => {
             console.log(metadata);
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
+            if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customerPhoneNumber));
             return res.send("Could not process requrest.");
         });
     }
@@ -104,8 +105,9 @@ class SendbirdChat {
     sendToGMB(sender, message, channel) {
         return GoogleMyBusiness.sendMessage(sender, message, channel);
     }
-    sendToTwilio(sender, message, channel) {
-        return Twilio.sendMessage(sender, message, channel);
+    sendToTwilio(clientPhoneNumber, message,customerPhoneNumber ) {
+        console.log("SendbirdChat.sendToTwilio", {sender, message, customerPhoneNumber})
+        return Twilio.sendMessage(clientPhoneNumber, message, customerPhoneNumber);
     }
 }
 var chat = new SendbirdChat(AppID, SendbirdChatToken);
