@@ -24,7 +24,7 @@ class SendbirdDesk {
         };
         return axios(authOptions).then(res => {
             return this.identifyActiveTicket(res.data);
-        }).catch(e => console.log("getActiveTicket FAILURE", e));
+        }).catch(e => console.log("getActiveTicket FAILURE", e.response.data));
     }
     identifyActiveTicket(data) {
         if (!data.results[0]) return false;

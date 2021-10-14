@@ -7,11 +7,11 @@ const twilioClient = require('twilio')(accountSid, authToken);
 class Twilio {
     constructor() {
     }
-    processWebhook(payload, res) { //CUSTOMER TO CLIENT
+    processWebhook(payload, res, SendbirdDesk) { //CUSTOMER TO CLIENT
         console.log("Twilio Payload",payload);
         // SEE https://www.twilio.com/docs/usage/webhooks/sms-webhooks
-        const from_phone_num = payload.from;
-        const to_phone_num = payload.to;
+        const from_phone_num = payload.from.replace(/\D+/g,'');
+        const to_phone_num = payload.to.replace(/\D+/g,'');
         const sendbird_id = `twilio_${to_phone_num}_${from_phone_num}`;
         const message = payload.body;
         const nickname = "SMS " + from_phone_num;
