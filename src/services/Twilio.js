@@ -2,12 +2,13 @@
 const axios = require('axios');
 const SendbirdDesk = require('./SendbirdDesk');
 const accountSid = "AC34a94e0a8b7c7aa1de244a5711718543"; //process.env.TWILIO_ACCOUNT_SID;
-const authToken = "ea56da67ea68a559f8274f6e64dc3907";
+const authToken = atob("NTk3MjQ5NWI0NmM3NTM0MmNhOWE4MzA5NmFjYWMwMDE=");
 const twilioClient = require('twilio')(accountSid, authToken);
 class Twilio {
     constructor() {
     }
     processWebhook(payload, res) { //CUSTOMER TO CLIENT
+        console.log("Twilio Payload",payload);
         // SEE https://www.twilio.com/docs/usage/webhooks/sms-webhooks
         const from_phone_num = payload.from;
         const to_phone_num = payload.to;
