@@ -8,7 +8,7 @@ class Twilio {
     constructor() {
     }
     processWebhook(payload, res, SendbirdDesk) { //CUSTOMER TO CLIENT
-        console.log("Twilio Payload",{payload});
+        console.log("Twilio.processWebhook");
         if(!payload) return res.send("No Payload");
         if(!payload.From) return res.send("No Sender");
         // SEE https://www.twilio.com/docs/usage/webhooks/sms-webhooks
