@@ -22,7 +22,6 @@ class Bandwidth {
         return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "bandwidth": to_phone_num.toString(), "customer_phone_num": from_phone_num.toString() }).then(result => res.send(result))
     }
     sendMessage(from_phone_num, message, to_phone_num) { //CLIENT TO CUSTOMER
-        var axios = require('axios');
         var data = JSON.stringify({
             "to": [
                 "+"+to_phone_num
