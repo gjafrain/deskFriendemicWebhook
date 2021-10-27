@@ -4,6 +4,7 @@ const { AppID, SendbirdChatToken } = require('../utils/sendBirdConfig');
 const Telegram = require('./Telegram');
 const GoogleMyBusiness = require('./GoogleMyBusiness');
 const Twilio = require('./Twilio');
+const Bandwidth = require('./Bandwidth');
 class SendbirdChat {
     constructor(app_id, token) {
         this.app_id = app_id;
@@ -23,9 +24,10 @@ class SendbirdChat {
         if(!/^sendbird_desk_agent_id/.test(sender.user_id)) return res.send("Not Agent"); //Must be sent by Desk Agent 
         //TODO only process agent messages
         return this.findService(channel).then(metadata => {
-            console.log(metadata);
+            console.log({metadata,message});
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
             if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customer_phone_num));
+            if (metadata.bandwidth) return res.send(this.sendToBandwidth(metadata.bandwidth, message, metadata.customer_phone_num));
             return res.send("Could not process requrest.");
         });
     }
@@ -108,6 +110,10 @@ class SendbirdChat {
     sendToTwilio(clientPhoneNumber, message,customerPhoneNumber ) {
         console.log("SendbirdChat.sendToTwilio", {clientPhoneNumber, customerPhoneNumber}, message.message)
         return Twilio.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
+    }
+    sendToBandwidth(clientPhoneNumber, message,customerPhoneNumber ) {
+        console.log("SendbirdChat.sendToBandwidth", {clientPhoneNumber, customerPhoneNumber}, message.message)
+        return Bandwidth.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
     }
 }
 var chat = new SendbirdChat(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_CHAT_API_TOKEN);
