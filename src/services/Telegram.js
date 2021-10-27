@@ -1,6 +1,6 @@
 
 const axios = require('axios');
-const telegramBotToken = "2037460170:AAE0rfJLXFxWylxHBGRlJgtMwe_d27nldIE";
+const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN
 const SendbirdDesk = require('./SendbirdDesk');
 class Telegram {
     constructor(app_id, token) {

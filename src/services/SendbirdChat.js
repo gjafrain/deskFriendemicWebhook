@@ -110,5 +110,5 @@ class SendbirdChat {
         return Twilio.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
     }
 }
-var chat = new SendbirdChat(AppID, SendbirdChatToken);
+var chat = new SendbirdChat(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_CHAT_API_TOKEN);
 module.exports = chat

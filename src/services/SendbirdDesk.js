@@ -261,5 +261,5 @@ class SendbirdDesk {
         })
     }
 }
-var desk = new SendbirdDesk(AppID, SendbirdDeskApiToken);
+var desk = new SendbirdDesk(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_DESK_API_TOKEN);
 module.exports = desk
