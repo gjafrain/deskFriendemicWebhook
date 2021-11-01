@@ -9,23 +9,18 @@ class Facebook {
             console.log('FACEBOOK PAYLOAD:-', payload);
             // Checks this is an event from a page subscription
             if (payload.object === 'page') {
-
                 // Iterates over each entry - there may be multiple if batched
                 payload.entry.forEach(function (entry) {
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];
                     console.log('FACEBOOK MESSAGE:-', webhook_event);
+                    const sender_id = webhook_event.sender.id;
+                    const sendbird_id = `facebook_${sender_id}`;
+                    const message = webhook_event.message.text;
+                    const nickname = `facebook_${sender_id}`;
+                    return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": sender_id }).then(result => res.status(200).send(result))
                 });
-
-                // Returns a '200 OK' response to all requests
-                res.status(200).send('EVENT_RECEIVED');
-                const user_id = payload.message.from.id;
-                const chat_id = payload.message.chat.id;
-                const sendbird_id = `telegram_${chat_id}_${user_id}`;
-                const message = payload.message.text;
-                const nickname = payload.message.from.first_name + " " + payload.message.from.last_name;
-                return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "telegram": chat_id.toString() }).then(result => res.status(200).send(result))
             } else {
                 console.log('FACEBOOK FAILURE:-', webhook_event);
                 // Returns a '404 Not Found' if event is not from a page subscription
@@ -34,11 +29,33 @@ class Facebook {
         }
         catch (err) {
             console.log('FACEBOOK FAILURE:-', err);
+            res.sendStatus(404);
         }
         // SendbirdDesk.processMessage();
     }
-    sendMessage(sender, message, channel) {
-        return null
+    sendMessage(sender, message) {
+        console.log("FACEBOOK sendMessage", { sender, message });
+        var authOptions = {
+            method: 'POST',
+            url: `https://graph.facebook.com/v12.0/me/messages?access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`,
+            data: {
+                "messaging_type": "RESPONSE",
+                "recipient": {
+                    "id": sender
+                },
+                "message": {
+                    "text": message
+                }
+            },
+            json: true
+        };
+        return axios(authOptions).then(res => {
+            console.log("FACEBOOK MESSAGE SENT!");
+            return "FACEBOOK MESSAGE SENT! ";
+        }).catch(error => {
+            console.log("FACEBOOK MESSAGE ERROR", error);
+            return false
+        })
     }
 
     verification(req, res) {

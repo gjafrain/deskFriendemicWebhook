@@ -5,6 +5,7 @@ const Telegram = require('./Telegram');
 const GoogleMyBusiness = require('./GoogleMyBusiness');
 const Twilio = require('./Twilio');
 const Bandwidth = require('./Bandwidth');
+const facebook = require('./Facebook');
 class SendbirdChat {
     constructor(app_id, token) {
         this.app_id = app_id;
@@ -119,7 +120,7 @@ class SendbirdChat {
     }
     sendToFacebook(id, message) {
         console.log("SendbirdChat.sendToFacebook", { id, message })
-        return Bandwidth.sendMessage(id, message);
+        return facebook.sendMessage(id, message);
     }
 }
 var chat = new SendbirdChat(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_CHAT_API_TOKEN);
