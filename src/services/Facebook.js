@@ -6,6 +6,7 @@ class Facebook {
     }
     processWebhook(payload, res) {
         try {
+            console.log('FACEBOOK PAYLOAD:-', payload);
             // Checks this is an event from a page subscription
             if (payload.object === 'page') {
 
@@ -19,6 +20,12 @@ class Facebook {
 
                 // Returns a '200 OK' response to all requests
                 res.status(200).send('EVENT_RECEIVED');
+                const user_id = payload.message.from.id;
+                const chat_id = payload.message.chat.id;
+                const sendbird_id = `telegram_${chat_id}_${user_id}`;
+                const message = payload.message.text;
+                const nickname = payload.message.from.first_name + " " + payload.message.from.last_name;
+                return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "telegram": chat_id.toString() }).then(result => res.status(200).send(result))
             } else {
                 console.log('FACEBOOK FAILURE:-', webhook_event);
                 // Returns a '404 Not Found' if event is not from a page subscription

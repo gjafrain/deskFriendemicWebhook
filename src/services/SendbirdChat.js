@@ -20,14 +20,16 @@ class SendbirdChat {
         const channel = payload.channel;
         const message = payload.payload;
         if (appId !== AppID) return res.send("Wrong App"); //Must be Friendemic's App
-        if (!sender) return  res.send("No Sender");; //Must have Sender
-        if(!/^sendbird_desk_agent_id/.test(sender.user_id)) return res.send("Not Agent"); //Must be sent by Desk Agent 
+        if (!sender) return res.send("No Sender");; //Must have Sender
+        if (!/^sendbird_desk_agent_id/.test(sender.user_id)) return res.send("Not Agent"); //Must be sent by Desk Agent 
         //TODO only process agent messages
         return this.findService(channel).then(metadata => {
-            console.log({metadata,message});
+            console.log({ metadata, message });
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
             if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customer_phone_num));
             if (metadata.bandwidth) return res.send(this.sendToBandwidth(metadata.bandwidth, message, metadata.customer_phone_num));
+            if (metadata.facebook) return res.send(this.sendToFacebook(metadata.facebook, message));
+
             return res.send("Could not process requrest.");
         });
     }
@@ -107,13 +109,17 @@ class SendbirdChat {
     sendToGMB(sender, message, channel) {
         return GoogleMyBusiness.sendMessage(sender, message, channel);
     }
-    sendToTwilio(clientPhoneNumber, message,customerPhoneNumber ) {
-        console.log("SendbirdChat.sendToTwilio", {clientPhoneNumber, customerPhoneNumber}, message.message)
+    sendToTwilio(clientPhoneNumber, message, customerPhoneNumber) {
+        console.log("SendbirdChat.sendToTwilio", { clientPhoneNumber, customerPhoneNumber }, message.message)
         return Twilio.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
     }
-    sendToBandwidth(clientPhoneNumber, message,customerPhoneNumber ) {
-        console.log("SendbirdChat.sendToBandwidth", {clientPhoneNumber, customerPhoneNumber}, message.message)
+    sendToBandwidth(clientPhoneNumber, message, customerPhoneNumber) {
+        console.log("SendbirdChat.sendToBandwidth", { clientPhoneNumber, customerPhoneNumber }, message.message)
         return Bandwidth.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
+    }
+    sendToFacebook(id, message) {
+        console.log("SendbirdChat.sendToFacebook", { id, message })
+        return Bandwidth.sendMessage(id, message);
     }
 }
 var chat = new SendbirdChat(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_CHAT_API_TOKEN);
