@@ -44,7 +44,7 @@ class Facebook {
                     "id": sender
                 },
                 "message": {
-                    "text": message
+                    "text": message.message
                 }
             },
             json: true
