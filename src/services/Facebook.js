@@ -1,10 +1,11 @@
 
 const axios = require('axios');
-const SendbirdDesk = require('./SendbirdDesk');
+// const SendbirdDesk = require('./SendbirdDesk');
+
 class Facebook {
     constructor() {
     }
-    processWebhook(payload, res) {
+    processWebhook(payload, res, SendbirdDesk) {
         try {
             console.log('FACEBOOK PAYLOAD:-', payload);
             // Checks this is an event from a page subscription
@@ -22,7 +23,6 @@ class Facebook {
                     return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": sender_id }).then(result => res.status(200).send(result))
                 });
             } else {
-                console.log('FACEBOOK FAILURE:-', webhook_event);
                 // Returns a '404 Not Found' if event is not from a page subscription
                 res.sendStatus(404);
             }
