@@ -32,12 +32,14 @@ class GoogleMyBusiness {
 
 
     sendMessage(conversationId,message) {
+        console.log("GoogleMyBusiness.sendMessage", {conversationId,message});
         this.sendGoogleMessage(conversationId, message);
     }
 
 
 
     sendGoogleMessage = async (conversationId, message) => {
+        console.log("GoogleMyBusiness.sendGoogleMessage", {conversationId,message});
         let authClient = await this.initCredentials();
 
         // Create the payload for sending a message
@@ -74,6 +76,7 @@ class GoogleMyBusiness {
             scopes,
         );
 
+        console.log("GoogleMyBusiness.initCredentials",{authClient});
         return new Promise(function (resolve, reject) {
             // authenticate request
             authClient.authorize(function (err, tokens) {
