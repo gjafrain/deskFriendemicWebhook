@@ -50,7 +50,7 @@ class SendbirdDesk {
                 method: 'POST',
                 url: `https://desk-api-${this.app_id}.sendbird.com/platform/v1/tickets`,
                 data: {
-                    "channelName": `Ticket Started By: ${sendbird_id}`,
+                    "channelName": `Ticket Started By: ${nickname}`,
                     "customerId": customerId,
                     "customFields": JSON.stringify({ src: src })
                 },
