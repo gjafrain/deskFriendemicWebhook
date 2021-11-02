@@ -45,7 +45,7 @@ class GoogleMyBusiness {
         let apiParams = {
             auth: authClient,
             parent: 'conversations/' + conversationId,
-            forceFallback: true, // Force usage of the fallback text
+            forceFallback: false, // Force usage of the fallback text
             resource: {
                 messageId: uuidv4(),
                 representative: {
@@ -55,14 +55,15 @@ class GoogleMyBusiness {
                 fallback: 'This is the fallback text'
             },
         };
-        console.log("GoogleMyBusiness.sendGoogleMessage", {apiParams});
+        let resource = apiParams.resource;
+        console.log("GoogleMyBusiness.sendGoogleMessage", {resource});
 
         // Call the message create function using the
         // Business Messages client library
         bmApi.conversations.messages.create(apiParams,
             { auth: authClient }, (err, response) => {
-                console.log(err);
-                console.log(response);
+                console.log("sendGoogleMessage.error:",{err});
+                console.log("sendGoogleMessage.response:",{response});
             });
     }
 
@@ -76,9 +77,8 @@ class GoogleMyBusiness {
             scopes,
         );
 
-     //   console.log(process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g,"\n"));
 
-        console.log("GoogleMyBusiness.initCredentials");
+        console.log("GoogleMyBusiness.initCredentials"); //,{authClient}
         return new Promise(function (resolve, reject) {
             // authenticate request
             authClient.authorize(function (err, tokens) {
