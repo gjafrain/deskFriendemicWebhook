@@ -76,7 +76,7 @@ class GoogleMyBusiness {
             scopes,
         );
 
-        console.log("GoogleMyBusiness.initCredentials",{authClient});
+        console.log("GoogleMyBusiness.initCredentials");
         return new Promise(function (resolve, reject) {
             // authenticate request
             authClient.authorize(function (err, tokens) {
