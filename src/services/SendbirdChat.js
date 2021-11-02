@@ -29,6 +29,7 @@ class SendbirdChat {
             if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customer_phone_num));
             if (metadata.bandwidth) return res.send(this.sendToBandwidth(metadata.bandwidth, message, metadata.customer_phone_num));
             if (metadata.facebook) return res.send(this.sendToFacebook(metadata.facebook, message));
+            if (metadata.gmb_agent) return res.send(this.sentToGoogle(metadata.gmb_agent, metadata.conversationId, message));
 
             return res.send("Could not process requrest.");
         });
@@ -106,8 +107,8 @@ class SendbirdChat {
         let messageText = `${message.message} —${sender.nickname}`;
         return Telegram.sendMessage(chat_id, messageText);
     }
-    sendToGMB(sender, message, channel) {
-        return GoogleMyBusiness.sendMessage(sender, message, channel);
+    sendToGoogle(agent, conversationId, message) {
+        return GoogleMyBusiness.sendMessage(conversationId, message);
     }
     sendToTwilio(clientPhoneNumber, message, customerPhoneNumber) {
         console.log("SendbirdChat.sendToTwilio", { clientPhoneNumber, customerPhoneNumber }, message.message)

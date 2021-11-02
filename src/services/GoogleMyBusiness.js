@@ -1,5 +1,16 @@
 
 const axios = require('axios');
+const businessmessages = require('businessmessages');
+const uuidv4 = require('uuidv4');
+const { google } = require('googleapis');
+// Initialize the Business Messages API
+let bmApi = new businessmessages.businessmessages_v1.Businessmessages({});
+
+// Set the scope that we need for the Business Messages API
+const scopes = [
+    'https://www.googleapis.com/auth/businessmessages',
+];
+
 class GoogleMyBusiness {
     constructor() {
     }
@@ -12,16 +23,74 @@ class GoogleMyBusiness {
         const agent = payload.agent;
         if (!payload?.context?.userInfo?.displayName) return res.send("No Sender");
         const message = messageData.text;
-        const from_name = payload.context.userInfo.displayName.toLowerCase().replace([/[^a-z0-9]/,"-"]);
+        const from_name = payload.context.userInfo.displayName.toLowerCase().replace([/[^a-z0-9]/, "-"]);
         const sendbird_id = `google_${conversationId}_${from_name}`;
         const nickname = payload.context.userInfo.displayName;
         console.log(SendbirdDesk);
         return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "gmb_agent": agent, "conversationId": conversationId }).then(result => res.send(result))
 
     }
-    sendMessage(sender, message, channel) {
-        return null
+
+
+    sendMessage(message, conversationId) {
+        sendGoogleMessage(conversationId, message);
     }
+
+
+
+    sendGoogleMessage = async (conversationId, message) => {
+        let authClient = await initCredentials();
+
+        // Create the payload for sending a message
+        let apiParams = {
+            auth: authClient,
+            parent: 'conversations/' + conversationId,
+            forceFallback: true, // Force usage of the fallback text
+            resource: {
+                messageId: uuidv4(),
+                representative: {
+                    representativeType: 'HUMAN',
+                },
+                text: message,
+                fallback: 'This is the fallback text'
+            },
+        };
+
+        // Call the message create function using the
+        // Business Messages client library
+        bmApi.conversations.messages.create(apiParams,
+            { auth: authClient }, (err, response) => {
+                console.log(err);
+                console.log(response);
+            });
+    }
+
+
+    initCredentials = async () => {
+        // configure a JWT auth client
+        let authClient = new google.auth.JWT(
+            process.env.GOOGLE_CLIENT_EMAIL,
+            null,
+            process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g,"\n"),
+            scopes,
+        );
+
+        return new Promise(function (resolve, reject) {
+            // authenticate request
+            authClient.authorize(function (err, tokens) {
+                if (err) {
+                    reject(false);
+                } else {
+                    resolve(authClient);
+                }
+            });
+        });
+    }
+
+
+
+
 }
 var gmb = new GoogleMyBusiness();
 module.exports = gmb
+
