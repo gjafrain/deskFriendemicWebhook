@@ -24,7 +24,7 @@ class GoogleMyBusiness {
         if (!payload?.context?.userInfo?.displayName) return res.send("No Sender");
         const message = messageData.text;
         const from_name = payload.context.userInfo.displayName.toLowerCase().replace(/[^a-z0-9]/, "-");
-        const sendbird_id = `google_${agent.replace(/\//g,".")}_${from_name}`;
+        const sendbird_id = `google_${agent.split("/")[1]}_${from_name}`;
         const nickname = "[Google] "+payload.context.userInfo.displayName;
         return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "gmb_agent": agent, "conversationId": conversationId }).then(result => res.send(result))
 
