@@ -31,7 +31,7 @@ class GoogleMyBusiness {
     }
 
 
-    sendMessage(message, conversationId) {
+    sendMessage(conversationId,message) {
         this.sendGoogleMessage(conversationId, message);
     }
 

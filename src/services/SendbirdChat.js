@@ -108,6 +108,7 @@ class SendbirdChat {
         return Telegram.sendMessage(chat_id, messageText);
     }
     sendToGoogle(agent, conversationId, message) {
+        console.log("SendbirdChat.sendToGoogle", { agent, conversationId }, message.message)
         return GoogleMyBusiness.sendMessage(conversationId, message);
     }
     sendToTwilio(clientPhoneNumber, message, customerPhoneNumber) {
