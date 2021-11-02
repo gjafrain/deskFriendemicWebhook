@@ -15,6 +15,7 @@ class SendbirdChat {
         };
     }
     processWebhook(payload, res) {
+        console.log("SendbirdChat.processWebhook",JSON.stringify(payload));
         const appId = payload.app_id;
         const sender = payload.sender;
         const channel = payload.channel;
