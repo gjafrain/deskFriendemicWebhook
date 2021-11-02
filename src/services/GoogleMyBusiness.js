@@ -1,7 +1,7 @@
 
 const axios = require('axios');
 const businessmessages = require('businessmessages');
-const uuidv4 = require('uuidv4');
+const { v4: uuidv4 } = require('uuid'); 
 const { google } = require('googleapis');
 // Initialize the Business Messages API
 let bmApi = new businessmessages.businessmessages_v1.Businessmessages({});
