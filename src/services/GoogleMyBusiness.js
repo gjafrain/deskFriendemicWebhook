@@ -38,7 +38,7 @@ class GoogleMyBusiness {
 
 
     sendGoogleMessage = async (conversationId, message) => {
-        let authClient = await this.nitCredentials();
+        let authClient = await this.initCredentials();
 
         // Create the payload for sending a message
         let apiParams = {
