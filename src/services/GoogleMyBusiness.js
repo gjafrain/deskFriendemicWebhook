@@ -39,7 +39,6 @@ class GoogleMyBusiness {
 
 
     sendGoogleMessage = async (conversationId, message) => {
-        console.log("GoogleMyBusiness.sendGoogleMessage", {conversationId,message});
         let authClient = await this.initCredentials();
 
         // Create the payload for sending a message
@@ -56,6 +55,7 @@ class GoogleMyBusiness {
                 fallback: 'This is the fallback text'
             },
         };
+        console.log("GoogleMyBusiness.sendGoogleMessage", {apiParams});
 
         // Call the message create function using the
         // Business Messages client library
@@ -69,16 +69,16 @@ class GoogleMyBusiness {
 
     initCredentials = async () => {
         // configure a JWT auth client
-
-        const privateKey = process.env.GOOGLE_PRIVATE_KEY;//.split(/\n/g).join("\n");
-
         let authClient = new google.auth.JWT(
             process.env.GOOGLE_CLIENT_EMAIL,
             null,
-            privateKey,
+            process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g,"\n"),
             scopes,
         );
 
+     //   console.log(process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g,"\n"));
+
+        console.log("GoogleMyBusiness.initCredentials");
         return new Promise(function (resolve, reject) {
             // authenticate request
             authClient.authorize(function (err, tokens) {
