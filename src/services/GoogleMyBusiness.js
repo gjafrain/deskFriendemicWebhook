@@ -15,7 +15,7 @@ class GoogleMyBusiness {
     constructor() {
     }
     processWebhook(payload, res, SendbirdDesk) {
-        console.log("GoogleMyBusiness.processWebhook", payload[0]);
+        console.log("GoogleMyBusiness.processWebhook", payload);
         if (!payload) return res.send("No Payload");
         let messageData = payload?.message;
         if (!messageData) return res.send("No Message");
@@ -23,8 +23,8 @@ class GoogleMyBusiness {
         const agent = payload.agent;
         if (!payload?.context?.userInfo?.displayName) return res.send("No Sender");
         const message = messageData.text;
-        const from_name = payload.context.userInfo.displayName.toLowerCase().replace([/[^a-z0-9]/, "-"]);
-        const sendbird_id = `google_${conversationId}_${from_name}`;
+        const from_name = payload.context.userInfo.displayName.toLowerCase().replace(/[^a-z0-9]/, "-");
+        const sendbird_id = `google_${agent.replace("/",".")}_${from_name}`;
         const nickname = payload.context.userInfo.displayName;
         return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "gmb_agent": agent, "conversationId": conversationId }).then(result => res.send(result))
 
