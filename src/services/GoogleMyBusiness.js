@@ -70,7 +70,7 @@ class GoogleMyBusiness {
     initCredentials = async () => {
         // configure a JWT auth client
 
-        const privateKey = process.env.GOOGLE_PRIVATE_KEY.split(/\n/g).join("\n");
+        const privateKey = process.env.GOOGLE_PRIVATE_KEY;//.split(/\n/g).join("\n");
 
         let authClient = new google.auth.JWT(
             process.env.GOOGLE_CLIENT_EMAIL,
@@ -79,7 +79,6 @@ class GoogleMyBusiness {
             scopes,
         );
 
-        console.log("GoogleMyBusiness.initCredentials",{privateKey},privateKey);
         return new Promise(function (resolve, reject) {
             // authenticate request
             authClient.authorize(function (err, tokens) {
