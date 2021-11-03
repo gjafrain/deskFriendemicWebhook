@@ -30,7 +30,7 @@ class SendbirdChat {
             if (metadata.telegram) return res.send(this.sendToTelegram(sender, message, metadata.telegram));
             if (metadata.twilio) return res.send(this.sendToTwilio(metadata.twilio, message, metadata.customer_phone_num));
             if (metadata.bandwidth) return res.send(this.sendToBandwidth(metadata.bandwidth, message, metadata.customer_phone_num));
-            if (metadata.facebook) return res.send(this.sendToFacebook(metadata.facebook, message));
+            if (metadata.facebook) return res.send(this.sendToFacebook(metadata.facebook, message, metadata.sender_id));
             if (metadata.gmb_agent) return res.send(this.sendToGoogle(metadata.gmb_agent, metadata.conversationId, message));
 
             return res.send("Could not process requrest.");
@@ -121,9 +121,9 @@ class SendbirdChat {
         console.log("SendbirdChat.sendToBandwidth", { clientPhoneNumber, customerPhoneNumber }, message.message)
         return Bandwidth.sendMessage(clientPhoneNumber, message.message, customerPhoneNumber);
     }
-    sendToFacebook(id, message) {
-        console.log("SendbirdChat.sendToFacebook", { id, message })
-        return facebook.sendMessage(id, message);
+    sendToFacebook(page_id, message, sender_id) {
+        console.log("SendbirdChat.sendToFacebook", { page_id, sender_id}, message.message)
+        return facebook.sendMessage(page_id, message.message, sender_id);
     }
 }
 var chat = new SendbirdChat(process.env.SENDBIRD_APPLICATION_ID, process.env.SENDBIRD_CHAT_API_TOKEN);

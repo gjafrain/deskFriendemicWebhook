@@ -16,12 +16,13 @@ class Facebook {
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];
-                    console.log('FACEBOOK MESSAGE:-', webhook_event);
+                    console.log('FACEBOOK MESSAGE:-', {webhook_event});
+                    const page_id = entry.id;
                     const sender_id = webhook_event.sender.id;
-                    const sendbird_id = `facebook_${sender_id}`;
+                    const sendbird_id = `facebook_${page_id}_${sender_id}`;
                     const message = webhook_event.message.text;
-                    const nickname = `facebook_${sender_id}`;
-                    return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": sender_id }).then(result => res.status(200).send(result))
+                    const nickname = `[Facebook] ${sender_id}`;
+                    return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": page_id, "sender_id": sender_id }).then(result => res.status(200).send(result))
                 });
             } else {
                 // Returns a '404 Not Found' if event is not from a page subscription
@@ -34,18 +35,23 @@ class Facebook {
         }
         // SendbirdDesk.processMessage();
     }
-    sendMessage(sender, message) {
-        console.log("FACEBOOK sendMessage", { sender, message });
+    sendMessage(page_id, message, sender_id) {
+        console.log("FACEBOOK sendMessage", { page_id, message, sender_id });
+
+
+        //TODO: LOAD ACCESS TOKEN BASED ON page_id
+
+
         var authOptions = {
             method: 'POST',
             url: `https://graph.facebook.com/v12.0/me/messages?access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`,
             data: {
                 "messaging_type": "RESPONSE",
                 "recipient": {
-                    "id": sender
+                    "id": sender_id
                 },
                 "message": {
-                    "text": message.message
+                    "text": message
                 }
             },
             json: true
