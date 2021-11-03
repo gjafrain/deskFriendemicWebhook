@@ -18,7 +18,7 @@ class Bandwidth {
         const from_phone_num = from.replace(/\D+/g, '');
         const to_phone_num = to.replace(/\D+/g, '');
         const sendbird_id = `bandwidth_${to_phone_num}_${from_phone_num}`;
-        const nickname = "SMS " + from_phone_num;
+        const nickname = "[Bandwidth] " + from_phone_num;
         return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "bandwidth": to_phone_num.toString(), "customer_phone_num": from_phone_num.toString() }).then(result => res.send(result))
     }
     sendMessage(from_phone_num, message, to_phone_num) { //CLIENT TO CUSTOMER

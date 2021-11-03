@@ -7,11 +7,12 @@ class Facebook {
     }
     processWebhook(payload, res, SendbirdDesk) {
         try {
-            console.log('FACEBOOK PAYLOAD:-', payload);
+            console.log('FACEBOOK PAYLOAD:-', {payload});
             // Checks this is an event from a page subscription
             if (payload.object === 'page') {
                 // Iterates over each entry - there may be multiple if batched
                 payload.entry.forEach(function (entry) {
+                    console.log('FACEBOOK ENTRY:-', {payload});
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];

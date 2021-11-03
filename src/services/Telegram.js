@@ -12,7 +12,7 @@ class Telegram {
         const chat_id = payload.message.chat.id;
         const sendbird_id = `telegram_${chat_id}_${user_id}`;
         const message = payload.message.text;
-        const nickname = payload.message.from.first_name+" "+payload.message.from.last_name;
+        const nickname = "[Telegram] "+payload.message.from.first_name+" "+payload.message.from.last_name;
         return SendbirdDesk.processMessage(sendbird_id,message,nickname,{"telegram":chat_id.toString()}).then(result=>res.send(result))
     }
     sendMessage(chat_id, message) {
