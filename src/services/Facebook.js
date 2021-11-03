@@ -12,7 +12,7 @@ class Facebook {
             if (payload.object === 'page') {
                 // Iterates over each entry - there may be multiple if batched
                 payload.entry.forEach(function (entry) {
-                    console.log('FACEBOOK ENTRY:-', {payload});
+                    console.log('FACEBOOK ENTRY:-', {entry});
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];
