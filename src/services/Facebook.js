@@ -9,7 +9,7 @@ class Facebook {
     fetchPagesAccessToken(res) {
         var authOptions = {
             method: 'GET',
-            url: `https://graph.facebook.com/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
+            url: `https://graph.facebook.com/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
             json: true
         };
         return axios(authOptions).then(res => {
