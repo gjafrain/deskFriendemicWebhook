@@ -1,6 +1,5 @@
 
 const axios = require('axios');
-const { AppID, SendbirdChatToken } = require('../utils/sendBirdConfig');
 const Telegram = require('./Telegram');
 const GoogleMyBusiness = require('./GoogleMyBusiness');
 const Twilio = require('./Twilio');

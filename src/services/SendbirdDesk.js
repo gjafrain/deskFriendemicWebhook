@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { AppID, SendbirdDeskApiToken } = require('../utils/sendBirdConfig');
 const { sendSuccessMessage } = require('../utils/common');
 const SendbirdChat = require('./SendbirdChat');
 class SendbirdDesk {
