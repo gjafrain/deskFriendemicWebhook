@@ -7,14 +7,22 @@ class Facebook {
     }
 
     fetchPagesAccessToken(res) {
+
+        console.log('Facebook.fetchPagesAccessToken'); //,{globalTokens:global.facebookTokens}
+        if (global.facebookTokens) {
+            return new Promise(function (resolve, reject) {
+                resolve(global.facebookTokens);
+            });
+        }
         var authOptions = {
             method: 'GET',
             url: `https://graph.facebook.com/v12.0/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
             json: true
         };
         return axios(authOptions).then(response => {
-            console.log("FACEBOOK TOKEN FETCH SUCCESS :- ", response.data);
-            global.facebookTokens = response.data.data
+            console.log("FACEBOOK TOKEN FETCH SUCCESS :- "); //, response.data
+            global.facebookTokens = response.data.data;
+            return response.data.data;
             res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
             console.log("FACEBOOK TOKEN FETCH ERROR :- ", error);
@@ -52,37 +60,43 @@ class Facebook {
         // SendbirdDesk.processMessage();
     }
     sendMessage(page_id, message, sender_id) {
-        console.log("FACEBOOK sendMessage", { page_id, message, sender_id });
+        console.log("Facebook.sendMessage", { page_id, message, sender_id });
 
-        //TODO: LOAD ACCESS TOKEN BASED ON page_id
-        let access_token = process.env.FACEBOOK_ACCESS_TOKEN
 
-        if (global.facebookTokens) {
-            let page = global.facebookTokens.find(x => x.id == page_id);
-            if (page) access_token = page.access_token
-        }
-
-        var authOptions = {
-            method: 'POST',
-            url: `https://graph.facebook.com/v12.0/me/messages?access_token=${access_token}`,
-            data: {
-                "messaging_type": "RESPONSE",
-                "recipient": {
-                    "id": sender_id
+        return this.fetchPagesAccessToken().then(tokens => {
+            console.log("Facebook.PageTokens"); //, { tokens }
+            let access_token = null
+            if (tokens) {
+                let page = tokens.find(x => x.id == page_id);
+                if (page) access_token = page.access_token
+            }
+            if (!access_token) {
+                console.log("Facebook.sendMessage Failed to Find Matching Page Token")
+                return null;
+            }
+            console.log("Facebook.FoundToken", { page_id, access_token });
+            var authOptions = {
+                method: 'POST',
+                url: `https://graph.facebook.com/v12.0/me/messages?access_token=${access_token}`,
+                data: {
+                    "messaging_type": "RESPONSE",
+                    "recipient": {
+                        "id": sender_id
+                    },
+                    "message": {
+                        "text": message
+                    }
                 },
-                "message": {
-                    "text": message
-                }
-            },
-            json: true
-        };
-        return axios(authOptions).then(res => {
-            console.log("FACEBOOK MESSAGE SENT!");
-            return "FACEBOOK MESSAGE SENT! ";
-        }).catch(error => {
-            console.log("FACEBOOK MESSAGE ERROR", error);
-            return false
-        })
+                json: true
+            };
+            return axios(authOptions).then(res => {
+                console.log("FACEBOOK MESSAGE SENT!");
+                return "FACEBOOK MESSAGE SENT! ";
+            }).catch(error => {
+                console.log("FACEBOOK MESSAGE ERROR", { access_token, error });
+                return false
+            })
+        });
     }
 
     verification(req, res) {
