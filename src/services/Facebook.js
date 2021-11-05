@@ -6,9 +6,9 @@ class Facebook {
     constructor() {
     }
 
-    fetchPagesAccessToken(res) {
+    fetchPagesAccessTokens(res) {
 
-        console.log('Facebook.fetchPagesAccessToken'); //,{globalTokens:global.facebookTokens}
+        console.log('Facebook.fetchPagesAccessTokens'); //,{globalTokens:global.facebookTokens}
         if (global.facebookTokens) {
             return new Promise(function (resolve, reject) {
                 resolve(global.facebookTokens);
@@ -61,7 +61,7 @@ class Facebook {
     }
     sendMessage(page_id, message, sender_id) {
         console.log("Facebook.sendMessage", { page_id, message, sender_id });
-        return this.fetchPagesAccessToken().then(tokens => {
+        return this.fetchPagesAccessTokens().then(tokens => {
             console.log("Facebook.PageTokens"); //, { tokens }
             let access_token = null
             if (tokens) {
@@ -100,8 +100,10 @@ class Facebook {
     verification(req, res) {
         try {
 
+            this.fetchPagesAccessTokens().then(tokens=>{
+
             // Your verify token. Should be a random string.
-            let VERIFY_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN
+            let VERIFY_TOKEN = tokens.shift();
 
             // Parse the query params
             let mode = req.query['hub.mode'];
@@ -124,6 +126,7 @@ class Facebook {
                     res.sendStatus(403);
                 }
             }
+            });
         }
         catch (err) {
             console.log('FACEBOOK_WEBHOOK_VERIFICATION_FAIL');

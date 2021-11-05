@@ -10,7 +10,7 @@ app.disable('x-powered-by')
 app.use(urlencoded({ extended: false }));
 app.use(json());
 // DEFAULT ROUTE
-app.get('/', (req, res) => { facebook.fetchPagesAccessToken(res) })
+app.get('/', (req, res) => { facebook.fetchPagesAccessTokens(res) })
 //
 app.use('/', router);
 const port = process.env.PORT || 3000
