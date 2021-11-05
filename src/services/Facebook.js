@@ -25,7 +25,7 @@ class Facebook {
             return response.data.data;
             res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
-            console.log("FACEBOOK TOKEN FETCH ERROR :- ", error);
+            console.log("FACEBOOK TOKEN FETCH ERROR :- ", error.response.data);
             res.send("FACEBOOK TOKEN FETCH ERROR");
         })
     }
@@ -91,7 +91,8 @@ class Facebook {
                 console.log("FACEBOOK MESSAGE SENT!");
                 return "FACEBOOK MESSAGE SENT! ";
             }).catch(error => {
-                console.log("FACEBOOK MESSAGE ERROR", { page_id, access_token, error });
+                let errormsg = error.response.data
+                console.log("FACEBOOK MESSAGE ERROR", { page_id, access_token, errormsg });
                 return false
             })
         });
