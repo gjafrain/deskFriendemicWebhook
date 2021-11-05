@@ -10,8 +10,8 @@ app.disable('x-powered-by')
 app.use(urlencoded({ extended: false }));
 app.use(json());
 // DEFAULT ROUTE
-app.get('/', (req, res) => {facebook.fetchPagesAccessToken() })
+app.get('/', (req, res) => { facebook.fetchPagesAccessToken(res) })
 //
-app.use('/',  router);
+app.use('/', router);
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log('Local app listening on port' + port + '!'));

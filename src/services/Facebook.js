@@ -6,7 +6,7 @@ class Facebook {
     constructor() {
     }
 
-    fetchPagesAccessToken() {
+    fetchPagesAccessToken(res) {
         var authOptions = {
             method: 'GET',
             url: `https://graph.facebook.com/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
@@ -15,10 +15,9 @@ class Facebook {
         return axios(authOptions).then(res => {
             console.log("FACEBOOK TOKEN FETCH SUCCESS :- ", res.data);
             global.facebookTokens = res.data.data
-            return "FACEBOOK TOKEN FETCH SUCCESS!";
+            res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
-            console.log("FACEBOOK TOKEN FETCH ERROR", error);
-            return false
+            res.send("FACEBOOK TOKEN FETCH ERROR", error);
         })
     }
     processWebhook(payload, res, SendbirdDesk) {
@@ -59,7 +58,7 @@ class Facebook {
 
         if (global.facebookTokens) {
             let page = global.facebookTokens.find(x => x.id == page_id);
-            if(page) access_token=page.access_token
+            if (page) access_token = page.access_token
         }
 
         var authOptions = {
