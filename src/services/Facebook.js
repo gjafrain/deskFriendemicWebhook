@@ -61,8 +61,6 @@ class Facebook {
     }
     sendMessage(page_id, message, sender_id) {
         console.log("Facebook.sendMessage", { page_id, message, sender_id });
-
-
         return this.fetchPagesAccessToken().then(tokens => {
             console.log("Facebook.PageTokens"); //, { tokens }
             let access_token = null
@@ -77,7 +75,7 @@ class Facebook {
             console.log("Facebook.FoundToken", { page_id, access_token });
             var authOptions = {
                 method: 'POST',
-                url: `https://graph.facebook.com/v12.0/me/messages?access_token=${access_token}`,
+                url: `https://graph.facebook.com/v12.0/${page_id}/conversations/messages?access_token=${access_token}`,
                 data: {
                     "messaging_type": "RESPONSE",
                     "recipient": {
@@ -93,7 +91,7 @@ class Facebook {
                 console.log("FACEBOOK MESSAGE SENT!");
                 return "FACEBOOK MESSAGE SENT! ";
             }).catch(error => {
-                console.log("FACEBOOK MESSAGE ERROR", { access_token, error });
+                console.log("FACEBOOK MESSAGE ERROR", { page_id, access_token, error });
                 return false
             })
         });
