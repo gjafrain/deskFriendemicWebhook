@@ -17,7 +17,7 @@ class Facebook {
             global.facebookTokens = res.data.data
             res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
-            console.log("FACEBOOK TOKEN FETCH ERROR :- ", res.data);
+            console.log("FACEBOOK TOKEN FETCH ERROR :- ", error);
             res.send("FACEBOOK TOKEN FETCH ERROR");
         })
     }
