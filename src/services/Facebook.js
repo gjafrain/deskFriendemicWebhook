@@ -12,9 +12,9 @@ class Facebook {
             url: `https://graph.facebook.com/v12.0/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
             json: true
         };
-        return axios(authOptions).then(res => {
-            console.log("FACEBOOK TOKEN FETCH SUCCESS :- ", res.data);
-            global.facebookTokens = res.data.data
+        return axios(authOptions).then(response => {
+            console.log("FACEBOOK TOKEN FETCH SUCCESS :- ", response.data);
+            global.facebookTokens = response.data.data
             res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
             console.log("FACEBOOK TOKEN FETCH ERROR :- ", error);
