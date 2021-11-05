@@ -20,7 +20,7 @@ class SendbirdChat {
         const sender = payload.sender;
         const channel = payload.channel;
         const message = payload.payload;
-        if (appId !== AppID) return res.send("Wrong App"); //Must be Friendemic's App
+        if (appId !== this.app_id) return res.send("Wrong App"); //Must be Friendemic's App
         if (!sender) return res.send("No Sender");; //Must have Sender
         if (!/^sendbird_desk_agent_id/.test(sender.user_id)) return res.send("Not Agent"); //Must be sent by Desk Agent 
         //TODO only process agent messages

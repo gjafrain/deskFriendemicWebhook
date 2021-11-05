@@ -23,10 +23,9 @@ class Facebook {
             console.log("FACEBOOK TOKEN FETCH SUCCESS :- "); //, response.data
             global.facebookTokens = response.data.data;
             return response.data.data;
-            res.send("FACEBOOK TOKEN FETCH SUCCESS!");
         }).catch(error => {
             console.log("FACEBOOK TOKEN FETCH ERROR :- ", error.response.data);
-            res.send("FACEBOOK TOKEN FETCH ERROR");
+            return null;
         })
     }
     processWebhook(payload, res, SendbirdDesk) {
