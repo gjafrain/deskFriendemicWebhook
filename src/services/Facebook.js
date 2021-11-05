@@ -5,18 +5,34 @@ const axios = require('axios');
 class Facebook {
     constructor() {
     }
+
+    fetchPagesAccessToken() {
+        var authOptions = {
+            method: 'GET',
+            url: `https://graph.facebook.com/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
+            json: true
+        };
+        return axios(authOptions).then(res => {
+            console.log("FACEBOOK TOKEN FETCH SUCCESS :- ", res.data);
+            global.facebookTokens = res.data.data
+            return "FACEBOOK TOKEN FETCH SUCCESS!";
+        }).catch(error => {
+            console.log("FACEBOOK TOKEN FETCH ERROR", error);
+            return false
+        })
+    }
     processWebhook(payload, res, SendbirdDesk) {
         try {
-            console.log('FACEBOOK PAYLOAD:-', {payload});
+            console.log('FACEBOOK PAYLOAD:-', { payload });
             // Checks this is an event from a page subscription
             if (payload.object === 'page') {
                 // Iterates over each entry - there may be multiple if batched
                 payload.entry.forEach(function (entry) {
-                    console.log('FACEBOOK ENTRY:-', {entry});
+                    console.log('FACEBOOK ENTRY:-', { entry });
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];
-                    console.log('FACEBOOK MESSAGE:-', {webhook_event});
+                    console.log('FACEBOOK MESSAGE:-', { webhook_event });
                     const page_id = entry.id;
                     const sender_id = webhook_event.sender.id;
                     const sendbird_id = `facebook_${page_id}_${sender_id}`;
@@ -38,13 +54,19 @@ class Facebook {
     sendMessage(page_id, message, sender_id) {
         console.log("FACEBOOK sendMessage", { page_id, message, sender_id });
 
-
         //TODO: LOAD ACCESS TOKEN BASED ON page_id
+
+        let access_token = process.env.FACEBOOK_ACCESS_TOKEN
+
+        if (global.facebookTokens) {
+            let page = global.facebookTokens.find(x => x.id == page_id);
+            if(page) access_token=page.access_token
+        }
 
 
         var authOptions = {
             method: 'POST',
-            url: `https://graph.facebook.com/v12.0/me/messages?access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`,
+            url: `https://graph.facebook.com/v12.0/me/messages?access_token=${access_token}`,
             data: {
                 "messaging_type": "RESPONSE",
                 "recipient": {
