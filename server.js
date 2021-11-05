@@ -5,11 +5,12 @@ const app = express();
 const { urlencoded, json } = require('body-parser');
 // 
 const router = require("./src/routes.js");
+const facebook = require('./src/services/Facebook.js');
 app.disable('x-powered-by')
 app.use(urlencoded({ extended: false }));
 app.use(json());
 // DEFAULT ROUTE
-app.get('/', (req, res) => { res.send('Webhook Server') })
+app.get('/', (req, res) => {facebook.fetchPagesAccessToken() })
 //
 app.use('/',  router);
 const port = process.env.PORT || 3000

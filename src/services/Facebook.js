@@ -55,14 +55,12 @@ class Facebook {
         console.log("FACEBOOK sendMessage", { page_id, message, sender_id });
 
         //TODO: LOAD ACCESS TOKEN BASED ON page_id
-
         let access_token = process.env.FACEBOOK_ACCESS_TOKEN
 
         if (global.facebookTokens) {
             let page = global.facebookTokens.find(x => x.id == page_id);
             if(page) access_token=page.access_token
         }
-
 
         var authOptions = {
             method: 'POST',
