@@ -75,7 +75,7 @@ class Facebook {
             console.log("Facebook.FoundToken", { page_id, access_token });
             var authOptions = {
                 method: 'POST',
-                url: `https://graph.facebook.com/v12.0/${page_id}/conversations/messages?access_token=${access_token}`,
+                url: `https://graph.facebook.com/v12.0/me/messages?access_token=${access_token}`,
                 data: {
                     "messaging_type": "RESPONSE",
                     "recipient": {
