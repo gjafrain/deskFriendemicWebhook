@@ -46,7 +46,9 @@ class Facebook {
                     const sendbird_id = `facebook_${page_id}_${sender_id}`;
                     const message = webhook_event.message.text;
                     const nickname = `[Facebook] ${sender_id}`;
-                    return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": page_id, "sender_id": sender_id }).then(result => res.status(200).send(result))
+                    res.status(200).send("FACEBOOK MESSAGE SENT :-")
+                    return SendbirdDesk.processMessage(sendbird_id, message, nickname, { "facebook": page_id, "sender_id": sender_id })
+                    // .then(result => {res.status(200).send(result)})
                 });
             } else {
                 // Returns a '404 Not Found' if event is not from a page subscription
