@@ -9,14 +9,17 @@ class Facebook {
     fetchPagesAccessTokens(res) {
 
         console.log('Facebook.fetchPagesAccessTokens'); //,{globalTokens:global.facebookTokens}
-        if (global.facebookTokens) {
-            return new Promise(function (resolve, reject) {
-                resolve(global.facebookTokens);
-            });
+        if (!res) {
+            if (global.facebookTokens) {
+                return new Promise(function (resolve, reject) {
+                    resolve(global.facebookTokens);
+                });
+            }
         }
+        
         var authOptions = {
             method: 'GET',
-            url: `https://graph.facebook.com/v12.0/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=bearer ${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
+            url: `https://graph.facebook.com/v12.0/me/accounts?fields=access_token&access_token=${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
             json: true
         };
         return axios(authOptions).then(response => {
@@ -103,7 +106,7 @@ class Facebook {
     verification(req, res) {
         try {
 
-            // this.fetchPagesAccessTokens().then(tokens => {
+            this.fetchPagesAccessTokens().then(tokens => {
 
                 // Your verify token. Should be a random string.
                 let VERIFY_TOKEN = process.env.FACEBOOK_PAGE_TOKEN// tokens.shift();
@@ -129,7 +132,7 @@ class Facebook {
                         res.sendStatus(403);
                     }
                 }
-            // });
+            });
         }
         catch (err) {
             console.log('FACEBOOK_WEBHOOK_VERIFICATION_FAIL');
