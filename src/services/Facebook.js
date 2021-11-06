@@ -103,10 +103,10 @@ class Facebook {
     verification(req, res) {
         try {
 
-            this.fetchPagesAccessTokens().then(tokens => {
+            // this.fetchPagesAccessTokens().then(tokens => {
 
                 // Your verify token. Should be a random string.
-                let VERIFY_TOKEN = tokens.shift();
+                let VERIFY_TOKEN = process.env.FACEBOOK_PAGE_TOKEN// tokens.shift();
 
                 // Parse the query params
                 let mode = req.query['hub.mode'];
@@ -129,7 +129,7 @@ class Facebook {
                         res.sendStatus(403);
                     }
                 }
-            });
+            // });
         }
         catch (err) {
             console.log('FACEBOOK_WEBHOOK_VERIFICATION_FAIL');
