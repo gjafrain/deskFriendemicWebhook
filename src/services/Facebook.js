@@ -16,7 +16,7 @@ class Facebook {
         }
         var authOptions = {
             method: 'GET',
-            url: `https://graph.facebook.com/v12.0/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
+            url: `https://graph.facebook.com/v12.0/${process.env.FACEBOOK_USER_ID}/accounts?fields=access_token&access_token=bearer ${process.env.FACEBOOK_USER_ACCESS_TOKEN}`,
             json: true
         };
         return axios(authOptions).then(response => {
@@ -34,12 +34,13 @@ class Facebook {
             // Checks this is an event from a page subscription
             if (payload.object === 'page') {
                 // Iterates over each entry - there may be multiple if batched
+                console.log('FACEBOOK MESSAGE LENGTH:-', payload.entry.length);
                 payload.entry.forEach(function (entry) {
-                    console.log('FACEBOOK ENTRY:-', { entry });
+                    // console.log('FACEBOOK ENTRY:-', { entry });
                     // Gets the message. entry.messaging is an array, but 
                     // will only ever contain one message, so we get index 0
                     let webhook_event = entry.messaging[0];
-                    console.log('FACEBOOK MESSAGE:-', { webhook_event });
+                    // console.log('FACEBOOK MESSAGE:-', { webhook_event });
                     const page_id = entry.id;
                     const sender_id = webhook_event.sender.id;
                     const sendbird_id = `facebook_${page_id}_${sender_id}`;
@@ -100,32 +101,32 @@ class Facebook {
     verification(req, res) {
         try {
 
-            this.fetchPagesAccessTokens().then(tokens=>{
+            this.fetchPagesAccessTokens().then(tokens => {
 
-            // Your verify token. Should be a random string.
-            let VERIFY_TOKEN = tokens.shift();
+                // Your verify token. Should be a random string.
+                let VERIFY_TOKEN = tokens.shift();
 
-            // Parse the query params
-            let mode = req.query['hub.mode'];
-            let token = req.query['hub.verify_token'];
-            let challenge = req.query['hub.challenge'];
+                // Parse the query params
+                let mode = req.query['hub.mode'];
+                let token = req.query['hub.verify_token'];
+                let challenge = req.query['hub.challenge'];
 
-            // Checks if a token and mode is in the query string of the request
-            if (mode && token) {
+                // Checks if a token and mode is in the query string of the request
+                if (mode && token) {
 
-                // Checks the mode and token sent is correct
-                if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+                    // Checks the mode and token sent is correct
+                    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
 
-                    // Responds with the challenge token from the request
-                    console.log(' FACEBOOK_WEBHOOK_VERIFIED');
-                    res.status(200).send(challenge);
+                        // Responds with the challenge token from the request
+                        console.log(' FACEBOOK_WEBHOOK_VERIFIED');
+                        res.status(200).send(challenge);
 
-                } else {
-                    console.log('FACEBOOK_WEBHOOK_VERIFICATION_FAIL');
-                    // Responds with '403 Forbidden' if verify tokens do not match
-                    res.sendStatus(403);
+                    } else {
+                        console.log('FACEBOOK_WEBHOOK_VERIFICATION_FAIL');
+                        // Responds with '403 Forbidden' if verify tokens do not match
+                        res.sendStatus(403);
+                    }
                 }
-            }
             });
         }
         catch (err) {
